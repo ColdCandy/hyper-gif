@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,12 @@
     <title>Hyper-GIF | 次世代画像規格</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <header class="hero">
         <div class="hero-bg">
@@ -30,7 +34,7 @@
             <div class="badge">次世代画像規格</div>
             <h1 class="hero-title"><span class="gradient-text">Hyper-GIF</span></h1>
             <p class="hero-subtitle">GIFの手軽さ × 実写映画の最高品質 × 低回線での即時再生</p>
-            <p class="hero-description">RTX 5070やeo光環境では最高画質を、低スペック・低回線環境ではAI補完による快適な視聴を提供するスケーラブルな画像規格。</p>
+            <p class="hero-description">RTX 5070や光回線環境では最高画質を、低スペック・低回線環境ではAI補完による快適な視聴を提供するスケーラブルな画像規格。</p>
             <div class="hero-cta">
                 <a href="#demo" class="btn btn-primary"><span>デモを体験</span></a>
                 <a href="#architecture" class="btn btn-secondary">技術仕様を見る</a>
@@ -39,7 +43,8 @@
         <div class="hero-visual">
             <div class="format-comparison">
                 <div class="format-card old">
-                    <div class="format-header"><span class="format-label">従来</span><span class="format-name">.GIF</span></div>
+                    <div class="format-header"><span class="format-label">従来</span><span class="format-name">.GIF</span>
+                    </div>
                     <div class="format-specs">
                         <div class="spec"><span class="spec-value">256</span><span class="spec-label">色</span></div>
                         <div class="spec"><span class="spec-value">8</span><span class="spec-label">bit</span></div>
@@ -47,10 +52,12 @@
                 </div>
                 <div class="vs-badge">VS</div>
                 <div class="format-card new">
-                    <div class="format-header"><span class="format-label">次世代</span><span class="format-name">.HGIF</span></div>
+                    <div class="format-header"><span class="format-label">次世代</span><span
+                            class="format-name">.HGIF</span></div>
                     <div class="format-specs">
                         <div class="spec"><span class="spec-value">∞</span><span class="spec-label">色</span></div>
-                        <div class="spec"><span class="spec-value">10</span><span class="spec-label">bit HDR</span></div>
+                        <div class="spec"><span class="spec-value">10</span><span class="spec-label">bit HDR</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -95,7 +102,8 @@
                     <div class="layer-badge">L2</div>
                     <h3>エンハンス・レイヤー</h3>
                     <p>最高画質（4K/120fps/10bit HDR）</p>
-                    <div class="layer-tech"><span class="tech-tag">VVC</span><span class="tech-tag">AV1 Ultra</span></div>
+                    <div class="layer-tech"><span class="tech-tag">VVC</span><span class="tech-tag">AV1 Ultra</span>
+                    </div>
                 </div>
                 <div class="layer-connector"></div>
                 <div class="layer l1">
@@ -118,9 +126,12 @@
                 <div class="demo-player">
                     <canvas id="demo-canvas" width="640" height="360"></canvas>
                     <div class="player-hud">
-                        <div class="hud-item"><span class="hud-label">レイヤー</span><span class="hud-value" id="current-layer">L1</span></div>
-                        <div class="hud-item"><span class="hud-label">品質</span><span class="hud-value" id="current-quality">720p</span></div>
-                        <div class="hud-item"><span class="hud-label">FPS</span><span class="hud-value" id="current-fps">30</span></div>
+                        <div class="hud-item"><span class="hud-label">レイヤー</span><span class="hud-value"
+                                id="current-layer">L1</span></div>
+                        <div class="hud-item"><span class="hud-label">品質</span><span class="hud-value"
+                                id="current-quality">720p</span></div>
+                        <div class="hud-item"><span class="hud-label">FPS</span><span class="hud-value"
+                                id="current-fps">30</span></div>
                     </div>
                 </div>
                 <div class="demo-controls">
@@ -131,7 +142,7 @@
                         <button class="preset-btn" data-bandwidth="5">3G</button>
                         <button class="preset-btn" data-bandwidth="50">4G</button>
                         <button class="preset-btn active" data-bandwidth="100">5G</button>
-                        <button class="preset-btn" data-bandwidth="1000">eo光</button>
+                        <button class="preset-btn" data-bandwidth="1000">光回線</button>
                     </div>
                     <div class="agent-log" id="agent-log"></div>
                 </div>
@@ -171,4 +182,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>
