@@ -239,6 +239,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('gif-upload');
     let uploadedImage = null;
+    let isProcessing = false;
+    let processingProgress = 0;
 
     const handleFile = (file) => {
         if (file && file.type === 'image/gif') {
@@ -247,18 +249,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 const img = new Image();
                 img.onload = () => {
                     uploadedImage = img;
+                    isProcessing = true;
+                    processingProgress = 0;
                     dropZone.classList.add('has-file');
+
                     agent.log('GIFファイルを読み込みました', 'info');
-                    agent.log('HGIF最適化プロセスを開始します...', 'decision');
+                    agent.log('HGIF AI解析エンジンを起動中...', 'decision');
+
+                    // 処理中シミュレーション（プログレス）
+                    const processInterval = setInterval(() => {
+                        processingProgress += 5;
+                        if (processingProgress >= 100) {
+                            clearInterval(processInterval);
+                            isProcessing = false;
+                            agent.log('AIアップスケーリング完了: 4K相当', 'info');
+                            agent.log('10bit HDR色彩情報を再構築しました', 'info');
+                            agent.log('HGIF 実行中 - 次世代品質で再生しています', 'decision');
+                            updateAgentLog();
+                        }
+                    }, 100);
 
                     const uploadText = dropZone.querySelector('.upload-text');
-                    if (uploadText) uploadText.textContent = '別のGIFをアップロード';
-
-                    setTimeout(() => {
-                        agent.log('AIレイヤー生成完了 (Core/Enhance)', 'info');
-                        agent.log('デプロイ準備完了', 'decision');
-                        updateAgentLog();
-                    }, 1500);
+                    if (uploadText) uploadText.textContent = '別のファイルを処理';
                 };
                 img.src = event.target.result;
             };
@@ -308,22 +320,76 @@ document.addEventListener('DOMContentLoaded', () => {
         }, false);
     }
 
-    // drawFrameをラップしてアップロード画像を表示できるようにする
+    // drawFrameをラップして『実行』ロジックを組み込む
     const originalDrawFrame = drawFrame;
     drawFrame = (strategy) => {
         originalDrawFrame(strategy);
 
         if (uploadedImage) {
-            const s = Math.min(canvas.width / uploadedImage.width, canvas.height / uploadedImage.height) * 0.6;
+            const s = Math.min(canvas.width / uploadedImage.width, canvas.height / uploadedImage.height) * 0.7;
             const w = uploadedImage.width * s;
             const h = uploadedImage.height * s;
+            const x = (canvas.width - w) / 2;
+            const y = (canvas.height - h) / 2;
 
-            ctx.save();
-            ctx.shadowBlur = strategy.layer === 'L2' ? 20 : 5;
-            ctx.shadowColor = 'rgba(168, 85, 247, 0.5)';
-            ctx.drawImage(uploadedImage, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
-            ctx.restore();
+            if (isProcessing) {
+                // 解析中アニメーション
+                ctx.save();
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(x, y, w, h);
+
+                // プログレスバー
+                ctx.strokeStyle = '#a855f7';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(x + 50, y + h / 2, w - 100, 10);
+                ctx.fillStyle = '#a855f7';
+                ctx.fillRect(x + 50, y + h / 2, (w - 100) * (processingProgress / 100), 10);
+
+                // スキャンライン
+                const scanY = y + (Math.sin(Date.now() / 200) * 0.5 + 0.5) * h;
+                ctx.beginPath();
+                ctx.moveTo(x, scanY);
+                ctx.lineTo(x + w, scanY);
+                ctx.strokeStyle = 'rgba(168, 85, 247, 0.8)';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+
+                ctx.font = '14px Inter';
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'center';
+                ctx.fillText('AI ANALYZING: ' + processingProgress + '%', canvas.width / 2, y + h / 2 - 20);
+                ctx.restore();
+            } else {
+                // 実行中の描画（品質に応じて加工）
+                ctx.save();
+
+                if (strategy.layer === 'L2') {
+                    // 次世代品質 (VVC/HDRシミュレーション)
+                    ctx.shadowBlur = 30;
+                    ctx.shadowColor = 'rgba(168, 85, 247, 0.6)';
+
+                    // 色彩を強調（オーバーレイ的な効果）
+                    ctx.filter = 'contrast(1.2) saturate(1.4) brightness(1.1)';
+                    ctx.drawImage(uploadedImage, x, y, w, h);
+
+                    // HDRゴースト効果（微細なズレで解像感向上を演出）
+                    ctx.globalAlpha = 0.1;
+                    ctx.filter = 'blur(10px)';
+                    ctx.drawImage(uploadedImage, x, y, w, h);
+                } else {
+                    // 通常品質 (L1)
+                    ctx.filter = 'contrast(1.0) grayscale(0.2)';
+                    ctx.drawImage(uploadedImage, x, y, w, h);
+                }
+
+                ctx.restore();
+
+                // UIラベル
+                ctx.fillStyle = strategy.layer === 'L2' ? '#a855f7' : '#71717a';
+                ctx.font = 'bold 12px JetBrains Mono';
+                ctx.textAlign = 'right';
+                ctx.fillText(strategy.layer === 'L2' ? '● HIGH-FIDELITY HGIF' : '○ STANDARD L1', x + w - 10, y + h - 10);
+            }
         }
     };
 });
-
