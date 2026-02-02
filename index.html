@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hyper-GIF - 次世代画像規格。GIFの手軽さ × 実写映画の最高品質 × 低回線での即時再生">
+    <title>Hyper-GIF | 次世代画像規格</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-bg">
+            <div class="grid-overlay"></div>
+            <div class="glow glow-1"></div>
+            <div class="glow glow-2"></div>
+        </div>
+        <nav class="nav">
+            <div class="logo"><span class="logo-icon">◈</span><span class="logo-text">Hyper-GIF</span></div>
+            <ul class="nav-links">
+                <li><a href="#concept">コンセプト</a></li>
+                <li><a href="#architecture">アーキテクチャ</a></li>
+                <li><a href="#demo">デモ</a></li>
+                <li><a href="#agent">Agentic Vision</a></li>
+            </ul>
+        </nav>
+        <div class="hero-content">
+            <div class="badge">次世代画像規格</div>
+            <h1 class="hero-title"><span class="gradient-text">Hyper-GIF</span></h1>
+            <p class="hero-subtitle">GIFの手軽さ × 実写映画の最高品質 × 低回線での即時再生</p>
+            <p class="hero-description">RTX 5070やeo光環境では最高画質を、低スペック・低回線環境ではAI補完による快適な視聴を提供するスケーラブルな画像規格。</p>
+            <div class="hero-cta">
+                <a href="#demo" class="btn btn-primary"><span>デモを体験</span></a>
+                <a href="#architecture" class="btn btn-secondary">技術仕様を見る</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="format-comparison">
+                <div class="format-card old">
+                    <div class="format-header"><span class="format-label">従来</span><span class="format-name">.GIF</span></div>
+                    <div class="format-specs">
+                        <div class="spec"><span class="spec-value">256</span><span class="spec-label">色</span></div>
+                        <div class="spec"><span class="spec-value">8</span><span class="spec-label">bit</span></div>
+                    </div>
+                </div>
+                <div class="vs-badge">VS</div>
+                <div class="format-card new">
+                    <div class="format-header"><span class="format-label">次世代</span><span class="format-name">.HGIF</span></div>
+                    <div class="format-specs">
+                        <div class="spec"><span class="spec-value">∞</span><span class="spec-label">色</span></div>
+                        <div class="spec"><span class="spec-value">10</span><span class="spec-label">bit HDR</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="concept" class="section concept-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">CONCEPT</span>
+                <h2 class="section-title">3つの革新</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>即時再生</h3>
+                    <p>数KB〜数十KBのコアレイヤーで、どんな環境でも一瞬で動き出す。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎬</div>
+                    <h3>最高品質</h3>
+                    <p>4K/120fps/10bit HDRの映画品質。VVCコーデックによる究極のビジュアル。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI補完</h3>
+                    <p>低回線時はAgentic Visionがリアルタイムで画質を補完。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture" class="section architecture-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">ARCHITECTURE</span>
+                <h2 class="section-title">階層型構造</h2>
+                <p class="section-desc">1つの.hgifファイルに役割の異なるデータを内包</p>
+            </div>
+            <div class="layer-diagram">
+                <div class="layer l2">
+                    <div class="layer-badge">L2</div>
+                    <h3>エンハンス・レイヤー</h3>
+                    <p>最高画質（4K/120fps/10bit HDR）</p>
+                    <div class="layer-tech"><span class="tech-tag">VVC</span><span class="tech-tag">AV1 Ultra</span></div>
+                </div>
+                <div class="layer-connector"></div>
+                <div class="layer l1">
+                    <div class="layer-badge">L1</div>
+                    <h3>コア・レイヤー</h3>
+                    <p>即時表示用（数KB〜数十KB）</p>
+                    <div class="layer-tech"><span class="tech-tag">AV1</span><span class="tech-tag">低ビットレート</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" class="section demo-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">DEMO</span>
+                <h2 class="section-title">帯域幅シミュレーター</h2>
+            </div>
+            <div class="demo-container">
+                <div class="demo-player">
+                    <canvas id="demo-canvas" width="640" height="360"></canvas>
+                    <div class="player-hud">
+                        <div class="hud-item"><span class="hud-label">レイヤー</span><span class="hud-value" id="current-layer">L1</span></div>
+                        <div class="hud-item"><span class="hud-label">品質</span><span class="hud-value" id="current-quality">720p</span></div>
+                        <div class="hud-item"><span class="hud-label">FPS</span><span class="hud-value" id="current-fps">30</span></div>
+                    </div>
+                </div>
+                <div class="demo-controls">
+                    <h3>帯域幅設定</h3>
+                    <input type="range" id="bandwidth-slider" min="1" max="1000" value="100" class="slider">
+                    <div class="bandwidth-display"><span id="bandwidth-value">100</span> Mbps</div>
+                    <div class="bandwidth-presets">
+                        <button class="preset-btn" data-bandwidth="5">3G</button>
+                        <button class="preset-btn" data-bandwidth="50">4G</button>
+                        <button class="preset-btn active" data-bandwidth="100">5G</button>
+                        <button class="preset-btn" data-bandwidth="1000">eo光</button>
+                    </div>
+                    <div class="agent-log" id="agent-log"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="agent" class="section agent-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">AGENTIC VISION</span>
+                <h2 class="section-title">自律制御システム</h2>
+            </div>
+            <div class="agent-grid">
+                <div class="agent-card">
+                    <h3>🔭 Environment Observer</h3>
+                    <p>デバイスのGPU性能、バッテリー、回線速度を監視しL1/L2を自律判断。</p>
+                </div>
+                <div class="agent-card">
+                    <h3>🎨 Contextual Upscaler</h3>
+                    <p>内容（実写、アニメ、ゲーム）を識別し最適なAIモデルでリアルタイム補完。</p>
+                </div>
+                <div class="agent-card">
+                    <h3>📊 Bit-Steering</h3>
+                    <p>視覚的な重要度が高い部分にビットレートを集中させ背景のデータ量を削る。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-brand"><span class="logo-icon">◈</span> Hyper-GIF</div>
+            <p>© 2026 Hyper-GIF Project</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
