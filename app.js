@@ -234,4 +234,61 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // GIFアップロード機能
+    const uploadTrigger = document.getElementById('upload-trigger');
+    const fileInput = document.getElementById('gif-upload');
+    let uploadedImage = null;
+
+    if (uploadTrigger && fileInput) {
+        uploadTrigger.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file && file.type === 'image/gif') {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        uploadedImage = img;
+                        agent.log('GIFファイルを読み込みました', 'info');
+                        agent.log('HGIF最適化プロセスを開始します...', 'decision');
+
+                        const uploadText = uploadTrigger.querySelector('.upload-text');
+                        if (uploadText) uploadText.textContent = '別のGIFをアップロード';
+                        uploadTrigger.style.background = 'rgba(0,0,0,0.1)';
+
+                        setTimeout(() => {
+                            agent.log('AIレイヤー生成完了 (Core/Enhance)', 'info');
+                            agent.log('デプロイ準備完了', 'decision');
+                            updateAgentLog();
+                        }, 1500);
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // drawFrameをラップしてアップロード画像を表示できるようにする
+    const originalDrawFrame = drawFrame;
+    drawFrame = (strategy) => {
+        originalDrawFrame(strategy);
+
+        if (uploadedImage) {
+            const s = Math.min(canvas.width / uploadedImage.width, canvas.height / uploadedImage.height) * 0.6;
+            const w = uploadedImage.width * s;
+            const h = uploadedImage.height * s;
+
+            ctx.save();
+            ctx.shadowBlur = strategy.layer === 'L2' ? 20 : 5;
+            ctx.shadowColor = 'rgba(168, 85, 247, 0.5)';
+            ctx.drawImage(uploadedImage, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
+            ctx.restore();
+        }
+    };
 });
+
