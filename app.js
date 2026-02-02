@@ -289,11 +289,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     agent.log('HGIF AI解析エンジンを起動中...', 'decision');
 
                     // 処理中シミュレーション（プログレス）
+                    const downloadBtn = document.getElementById('download-btn');
+                    downloadBtn.disabled = true;
+
                     const processInterval = setInterval(() => {
                         processingProgress += 5;
                         if (processingProgress >= 100) {
                             clearInterval(processInterval);
                             isProcessing = false;
+                            downloadBtn.disabled = false; // ダウンロード可能にする
                             agent.log('AIアップスケーリング完了: 4K相当', 'info');
                             agent.log('10bit HDR色彩情報を再構築しました', 'info');
                             agent.log('HGIF 実行中 - 次世代品質で再生しています', 'decision');
@@ -423,5 +427,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.fillText(strategy.layer === 'L2' ? '● HIGH-FIDELITY HGIF' : '○ STANDARD L1', x + w - 10, y + h - 10);
             }
         }
-    };
-});
+        // ダウンロード機能の実行
+        const downloadBtn = document.getElementById('download-btn');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', () => {
+                if (!uploadedImage) return;
+
+                // ファイル保存用のリンクを作成
+                const link = document.createElement('a');
+                link.download = 'processed_image.hgif';
+
+                // 一時的にキャプチャ用のCanvasを作成（背景を抜いた画像単体にするため）
+                const captureCanvas = document.createElement('canvas');
+                captureCanvas.width = uploadedImage.width;
+                captureCanvas.height = uploadedImage.height;
+                const cctx = captureCanvas.getContext('2d');
+
+                // L2（高品質）エフェクトを適用して描画
+                cctx.filter = 'contrast(1.2) saturate(1.4) brightness(1.1)';
+                cctx.drawImage(uploadedImage, 0, 0);
+
+                link.href = captureCanvas.toDataURL('image/png'); // 中身は高品質PNGだが拡張子をhgifに
+                link.click();
+
+                agent.log('HGIF形式でファイルを書き出しました', 'info');
+                updateAgentLog();
+            });
+        }
+    });
