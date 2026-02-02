@@ -15,7 +15,7 @@ class HyperGIFAgent {
     selectStrategy(bandwidth) {
         const hasVVCDec = this.device.vvcSupport;
         const hasGPU = this.device.gpuTier >= 3;
-        
+
         if (bandwidth >= 500 && hasVVCDec && hasGPU) {
             return { layer: 'L2', quality: '4K HDR', fps: 120, bitrate: '50 Mbps', codec: 'VVC' };
         } else if (bandwidth >= 100 && hasGPU) {
@@ -41,7 +41,7 @@ const deviceProfiles = {
     mobile: { name: 'iPhone 15 Pro', gpuTier: 2, vvcSupport: false },
     tablet: { name: 'iPad Pro M2', gpuTier: 2, vvcSupport: false },
     laptop: { name: 'RTX 4060 Laptop', gpuTier: 3, vvcSupport: true },
-    desktop: { name: 'RTX 5070 Desktop', gpuTier: 4, vvcSupport: true }
+    desktop: { name: 'High Performance Desktop', gpuTier: 4, vvcSupport: true }
 };
 
 // 初期化
@@ -56,7 +56,7 @@ const ctx = canvas.getContext('2d');
 
 function drawFrame(strategy) {
     const time = Date.now() / 1000;
-    
+
     // 背景グラデーション（品質に応じて変化）
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
     if (strategy.layer === 'L2') {
@@ -69,7 +69,7 @@ function drawFrame(strategy) {
     }
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
+
     // パーティクルシステム
     const particleCount = strategy.layer === 'L2' ? 50 : 20;
     for (let i = 0; i < particleCount; i++) {
@@ -77,18 +77,18 @@ function drawFrame(strategy) {
         const y = (Math.cos(time * 0.3 + i * 0.5) * 0.5 + 0.5) * canvas.height;
         const size = strategy.layer === 'L2' ? 3 + Math.sin(time + i) * 2 : 2;
         const alpha = strategy.layer === 'L2' ? 0.8 : 0.4;
-        
+
         ctx.beginPath();
         ctx.arc(x, y, size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(168, 85, 247, ${alpha})`;
         ctx.fill();
     }
-    
+
     // 中央のアニメーションオブジェ
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const radius = 80 + Math.sin(time * 2) * 20;
-    
+
     // グロー効果（L2のみ）
     if (strategy.layer === 'L2') {
         const glowGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius * 2);
@@ -98,7 +98,7 @@ function drawFrame(strategy) {
         ctx.fillStyle = glowGradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
-    
+
     // メインの円
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
@@ -108,7 +108,7 @@ function drawFrame(strategy) {
     circleGradient.addColorStop(1, '#06b6d4');
     ctx.fillStyle = circleGradient;
     ctx.fill();
-    
+
     // 回転するリング
     const ringCount = strategy.layer === 'L2' ? 3 : 1;
     for (let r = 0; r < ringCount; r++) {
@@ -122,13 +122,13 @@ function drawFrame(strategy) {
         ctx.stroke();
         ctx.restore();
     }
-    
+
     // テキスト表示
     ctx.font = 'bold 24px Inter';
     ctx.fillStyle = 'white';
     ctx.textAlign = 'center';
     ctx.fillText('.HGIF', centerX, centerY + 8);
-    
+
     ctx.font = '12px Inter';
     ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
     ctx.fillText(strategy.quality + ' @ ' + strategy.fps + 'fps', centerX, centerY + 30);
@@ -143,8 +143,8 @@ function updateHUD(strategy) {
 function updateAgentLog() {
     const logElement = document.getElementById('agent-log');
     if (!logElement) return;
-    
-    logElement.innerHTML = agent.logEntries.map(entry => 
+
+    logElement.innerHTML = agent.logEntries.map(entry =>
         `<div class="log-entry ${entry.type}">[${entry.timestamp}] ${entry.message}</div>`
     ).join('');
 }
@@ -153,7 +153,7 @@ function animate() {
     const strategy = agent.selectStrategy(agent.bandwidth);
     drawFrame(strategy);
     updateHUD(strategy);
-    
+
     if (isPlaying) {
         animationId = requestAnimationFrame(animate);
     }
@@ -176,20 +176,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // 帯域幅スライダー
     const bandwidthSlider = document.getElementById('bandwidth-slider');
     const bandwidthValue = document.getElementById('bandwidth-value');
-    
+
     bandwidthSlider.addEventListener('input', (e) => {
         const value = parseInt(e.target.value);
         agent.bandwidth = value;
         bandwidthValue.textContent = value;
-        
+
         const strategy = agent.selectStrategy(value);
         agent.log(`帯域幅変更: ${value} Mbps → ${strategy.layer} (${strategy.codec})`, 'decision');
         updateAgentLog();
-        
+
         // プリセットボタンの更新
         document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
     });
-    
+
     // プリセットボタン
     document.querySelectorAll('.preset-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -197,16 +197,16 @@ document.addEventListener('DOMContentLoaded', () => {
             agent.bandwidth = bandwidth;
             bandwidthSlider.value = bandwidth;
             bandwidthValue.textContent = bandwidth;
-            
+
             document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
+
             const strategy = agent.selectStrategy(bandwidth);
             agent.log(`プリセット選択: ${btn.textContent.split('\n')[0]} → ${strategy.layer}`, 'decision');
             updateAgentLog();
         });
     });
-    
+
     // デバイス選択
     const deviceSelect = document.getElementById('device-select');
     if (deviceSelect) {
@@ -218,15 +218,15 @@ document.addEventListener('DOMContentLoaded', () => {
             updateAgentLog();
         });
     }
-    
+
     // 初期描画開始
     agent.log('Hyper-GIF Agent 初期化完了', 'info');
     agent.log('Environment Observer: アクティブ', 'info');
     startPlayback();
-    
+
     // スムーススクロール
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
