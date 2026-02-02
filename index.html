@@ -141,9 +141,25 @@
                                 id="current-fps">30</span></div>
                     </div>
                 </div>
-                <div class="demo-controls">
-                    <h3>帯域幅設定</h3>
-                    <input type="range" id="bandwidth-slider" min="1" max="1000" value="100" class="slider">
+                <div class="control-group">
+                    <h3>ハードウェアスペック</h3>
+                    <select id="device-select" class="select-input">
+                        <option value="desktop">High Performance Desktop (RTX 50-series)</option>
+                        <option value="laptop">Middle Tier Laptop (RTX 40-series)</option>
+                        <option value="tablet">Mobile Tablet (M2 Chip)</option>
+                        <option value="mobile">Generic Smartphone</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <div class="flex-between">
+                        <h3>帯域幅設定</h3>
+                        <label class="switch-label">
+                            <input type="checkbox" id="auto-mode" checked>
+                            <span class="switch-text">Auto AI Control</span>
+                        </label>
+                    </div>
+                    <input type="range" id="bandwidth-slider" min="1" max="1000" value="100" class="slider" disabled>
                     <div class="bandwidth-display"><span id="bandwidth-value">100</span> Mbps</div>
                     <div class="bandwidth-presets">
                         <button class="preset-btn" data-bandwidth="5">3G</button>
@@ -151,8 +167,8 @@
                         <button class="preset-btn active" data-bandwidth="100">5G</button>
                         <button class="preset-btn" data-bandwidth="1000">光回線</button>
                     </div>
-                    <div class="agent-log" id="agent-log"></div>
                 </div>
+                <div class="agent-log" id="agent-log"></div>
             </div>
         </div>
     </section>

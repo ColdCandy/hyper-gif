@@ -219,21 +219,53 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 初期描画開始
-    agent.log('Hyper-GIF Agent 初期化完了', 'info');
-    agent.log('Environment Observer: アクティブ', 'info');
-    startPlayback();
+    // Auto Mode 制御ロジック
+    const autoModeSwitch = document.getElementById('auto-mode');
+    let autoInterval = null;
 
-    // スムーススクロール
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const startAutoMode = () => {
+        if (autoInterval) clearInterval(autoInterval);
+        autoInterval = setInterval(() => {
+            if (!autoModeSwitch.checked) {
+                clearInterval(autoInterval);
+                return;
             }
-        });
+
+            // 擬似的な回線変動シミュレーション
+            const noise = Math.sin(Date.now() / 2000) * 100;
+            const newBandwidth = Math.max(1, Math.min(1000, 100 + noise + Math.random() * 50));
+
+            agent.bandwidth = Math.round(newBandwidth);
+            bandwidthSlider.value = agent.bandwidth;
+            bandwidthValue.textContent = agent.bandwidth;
+
+            const strategy = agent.selectStrategy(agent.bandwidth);
+            // ログが多すぎないように戦略が変わった時だけ記録
+            if (agent.currentLayer !== strategy.layer) {
+                agent.currentLayer = strategy.layer;
+                agent.log(`Auto Control: 回線変動検知 → ${strategy.layer}に最適化`, 'decision');
+                updateAgentLog();
+            }
+        }, 1000);
+    };
+
+    autoModeSwitch.addEventListener('change', (e) => {
+        const isAuto = e.target.checked;
+        bandwidthSlider.disabled = isAuto;
+        document.querySelectorAll('.preset-btn').forEach(btn => btn.disabled = isAuto);
+
+        if (isAuto) {
+            agent.log('Auto AI Control: ON (自律制御モード)', 'info');
+            startAutoMode();
+        } else {
+            agent.log('Auto AI Control: OFF (マニュアルモード)', 'info');
+            if (autoInterval) clearInterval(autoInterval);
+        }
+        updateAgentLog();
     });
+
+    // 初期化時にオートモードなら開始
+    if (autoModeSwitch.checked) startAutoMode();
 
     // GIFアップロード機能
     const dropZone = document.getElementById('drop-zone');
