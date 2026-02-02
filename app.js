@@ -236,41 +236,76 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // GIFアップロード機能
-    const uploadTrigger = document.getElementById('upload-trigger');
+    const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('gif-upload');
     let uploadedImage = null;
 
-    if (uploadTrigger && fileInput) {
-        uploadTrigger.addEventListener('click', () => {
+    const handleFile = (file) => {
+        if (file && file.type === 'image/gif') {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    uploadedImage = img;
+                    dropZone.classList.add('has-file');
+                    agent.log('GIFファイルを読み込みました', 'info');
+                    agent.log('HGIF最適化プロセスを開始します...', 'decision');
+
+                    const uploadText = dropZone.querySelector('.upload-text');
+                    if (uploadText) uploadText.textContent = '別のGIFをアップロード';
+
+                    setTimeout(() => {
+                        agent.log('AIレイヤー生成完了 (Core/Enhance)', 'info');
+                        agent.log('デプロイ準備完了', 'decision');
+                        updateAgentLog();
+                    }, 1500);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        } else if (file) {
+            agent.log('エラー: GIFファイルを選択してください', 'error');
+            updateAgentLog();
+        }
+    };
+
+    if (dropZone && fileInput) {
+        // クリックでファイル選択
+        dropZone.addEventListener('click', (e) => {
+            // HUDなどの子要素クリック時は反応させない
+            if (e.target.closest('.player-hud')) return;
             fileInput.click();
         });
 
         fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file && file.type === 'image/gif') {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        uploadedImage = img;
-                        agent.log('GIFファイルを読み込みました', 'info');
-                        agent.log('HGIF最適化プロセスを開始します...', 'decision');
-
-                        const uploadText = uploadTrigger.querySelector('.upload-text');
-                        if (uploadText) uploadText.textContent = '別のGIFをアップロード';
-                        uploadTrigger.style.background = 'rgba(0,0,0,0.1)';
-
-                        setTimeout(() => {
-                            agent.log('AIレイヤー生成完了 (Core/Enhance)', 'info');
-                            agent.log('デプロイ準備完了', 'decision');
-                            updateAgentLog();
-                        }, 1500);
-                    };
-                    img.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
+            handleFile(e.target.files[0]);
         });
+
+        // ドラッグ＆ドロップ
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            }, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.add('drag-over');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.remove('drag-over');
+            }, false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const file = dt.files[0];
+            handleFile(file);
+        }, false);
     }
 
     // drawFrameをラップしてアップロード画像を表示できるようにする

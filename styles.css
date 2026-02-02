@@ -734,10 +734,64 @@ body {
     }
 }
 
-/* Upload Overlay Styles */
+/* Upload Zone Styles */
 .demo-player {
     position: relative;
     cursor: pointer;
+    border: 2px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.upload-zone {
+    position: absolute;
+    inset: 15px;
+    border: 2px dashed rgba(168, 85, 247, 0.4);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    background: rgba(168, 85, 247, 0.05);
+    backdrop-filter: blur(2px);
+    transition: all 0.3s ease;
+}
+
+.demo-player:hover .upload-zone,
+.demo-player.drag-over .upload-zone {
+    border-color: var(--accent-primary);
+    background: rgba(168, 85, 247, 0.15);
+    border-style: solid;
+}
+
+.upload-content {
+    text-align: center;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.upload-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5));
+}
+
+.upload-text {
+    font-weight: 600;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* ファイル読み込み後のスタイル */
+.demo-player.has-file .upload-zone {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.demo-player.has-file:hover .upload-zone {
+    opacity: 1;
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0.6);
 }
 
 .upload-overlay {
